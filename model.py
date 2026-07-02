@@ -132,8 +132,24 @@ def init_zero_bias(length):
     # We use float64 so that downstream gradient updates accumulate cleanly. 
     return np.zeros(length, dtype=np.float64)
 
-# Step 13 - pad_2d (not yet solved)
-# TODO: implement
+# Step 13 - pad_2d
+import numpy as np
+
+def pad_2d(images, pad):
+    # Step 1: If no padding is requested, return the input unchanged.
+    if pad == 0:
+        return images
+    # Step 2: Read the input dimensions.
+    N, C, H, W = images.shape
+    # Step 3: Allocate a larger tensor initialized with zeros.
+    padded = np.zeros(
+        (N, C, H + 2 * pad, W + 2 * pad),
+        dtype=images.dtype
+    )
+    # Step 4: Copy the original images into the center.
+    padded[:, :, pad:pad + H, pad:pad + W] = images
+    # Step 5: Return the padded tensor.
+    return padded
 
 # Step 14 - output_spatial_size (not yet solved)
 # TODO: implement
