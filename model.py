@@ -42,7 +42,6 @@ def exp_shifted(logits):
 
 # Step 5 - stable_softmax
 def stable_softmax(logits):
-    # TODO: Compute a numerically stable softmax row-wise over (N, C) logits.
     exp_shifted_logits = exp_shifted(logits)
     row_sum_vals = row_sum(exp_shifted_logits)
     return exp_shifted_logits / row_sum_vals
