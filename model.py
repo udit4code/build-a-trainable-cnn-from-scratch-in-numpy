@@ -83,8 +83,16 @@ def gather_true_class_probs(probs, labels):
     # Step 2 : For each row in probs (which is given by row_index), its corresponding probability is the one given by the true class label.  
     return probs[row_indices, labels]
 
-# Step 8 - cross_entropy_loss (not yet solved)
-# TODO: implement
+# Step 8 - cross_entropy_loss
+import numpy as np
+
+def cross_entropy_loss(probs, labels, eps=1e-12):
+    # Step 1 : Get true class probs 
+    true_class_probs = gather_true_class_probs(probs, labels)
+    # Step 2: Prevent log(0)
+    true_class_probs = np.clip(true_class_probs, eps, 1.0)
+    # Step 3: Compute negative log-likelihood
+    return -np.mean(np.log(true_class_probs))
 
 # Step 9 - accuracy (not yet solved)
 # TODO: implement
