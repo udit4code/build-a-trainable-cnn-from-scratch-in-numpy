@@ -91,9 +91,11 @@ def cross_entropy_loss(probs, labels, eps=1e-12):
 
 # Step 9 - accuracy
 def accuracy(logits_or_probs, labels):
-    # Step 1 : Get the predicted class labels, based on logits. 
+    # Step 1: Get the predicted class for each sample by taking the argmax
+    # of each row (works for both logits and probabilities).
     predictions = argmax_rows(logits_or_probs)
-    # Step 2 : For each sample, check if its predicted_label is same as it ground truth label 
+    # Step 2: Compare the predicted classes with the ground-truth labels
+    # and return the fraction of correct predictions.
     return np.mean(predictions == labels)
 
 # Step 10 - he_std (not yet solved)
