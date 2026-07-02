@@ -177,8 +177,16 @@ def pad_2d_without_numpy_pad_function(images, pad):
     # Step 5: Return the padded tensor.
     return padded
 
-# Step 14 - output_spatial_size (not yet solved)
-# TODO: implement
+# Step 14 - output_spatial_size
+import numpy as np
+
+def output_spatial_size(input_size, kernel, stride, padding):
+    # Step 1: Account for the padding added to both sides of the input.
+    padded_input = input_size + 2 * padding
+    # Step 2: Compute how many times the kernel can slide across the padded input using the given stride.
+    output_size = (padded_input - kernel) // stride + 1
+    # Step 3: Return the output spatial dimension as a Python int.
+    return int(output_size)
 
 # Step 15 - im2col (not yet solved)
 # TODO: implement
