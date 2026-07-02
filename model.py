@@ -376,8 +376,48 @@ def col2im_naive(cols, input_shape, kernel_h, kernel_w, stride, padding):
         return padded
     return padded[:,:,padding:padding + H,padding:padding + W]
 
-# Step 17 - conv2d_forward (not yet solved)
-# TODO: implement
+# Step 17 - conv2d_forward
+import numpy as np
+
+def conv2d_forward(x, weights, bias, stride, padding):
+    # Step 1: Read the input and kernel dimensions.
+    N, C, H, W = x.shape
+    C_out, C_in, kernel_h, kernel_w = weights.shape
+    # Step 2: Compute the spatial dimensions of the output feature map.
+    out_h = output_spatial_size(H, kernel_h, stride, padding)
+    out_w = output_spatial_size(W, kernel_w, stride, padding)
+    # Step 3: Unroll every receptive field of the input into one
+    # row using the im2col transformation.
+    # Shape: (N * out_h * out_w, C_in * kernel_h * kernel_w)
+    cols = im2col(x, kernel_h, kernel_w, stride,padding)
+    # Step 4: Flatten each convolution filter into one row.
+    # Original: (C_out, C_in, kh, kw)
+    # Flattened: (C_out, C_in * kh * kw)
+    weight_matrix = weights.reshape(C_out, -1)
+    # Step 5: Perform the convolution as one matrix multiplication.
+    # cols: (N*out_h*out_w, C_in*kh*kw)
+    # weight_matrix.T: (C_in*kh*kw, C_out)
+    # Result: (N*out_h*out_w, C_out)
+    out = cols @ weight_matrix.T
+    # Step 6: Add one bias value per output channel.
+    # NumPy broadcasts bias across every output location.
+    out += bias
+    # Step 7: Reshape back into a 4D feature map.
+    # Current: (N*out_h*out_w, C_out)
+    # Intermediate: (N, out_h, out_w, C_out)
+    # Final: (N, C_out, out_h, out_w)
+    out = out.reshape(N,out_h,out_w,C_out).transpose(0, 3, 1, 2)
+    # Step 8: Store everything needed for the backward pass.
+    cache = {
+        "x_shape": x.shape,
+        "weights": weights,
+        "cols": cols,
+        "stride": stride,
+        "padding": padding,
+        "kernel_h": kernel_h,
+        "kernel_w": kernel_w,
+    }
+    return out, cache
 
 # Step 18 - conv2d_grad_input (not yet solved)
 # TODO: implement
