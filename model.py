@@ -188,8 +188,44 @@ def output_spatial_size(input_size, kernel, stride, padding):
     # Step 3: Return the output spatial dimension as a Python int.
     return int(output_size)
 
-# Step 15 - im2col (not yet solved)
-# TODO: implement
+# Step 15 - im2col
+import numpy as np
+
+def im2col(images, kernel_h, kernel_w, stride, padding):
+    # Step 1: Zero-pad the input images.
+    padded = pad_2d(images, padding)
+    # Step 2: Read the original input dimensions.
+    N, C, H, W = images.shape
+    # Step 3: Compute the spatial dimensions of the output feature map.
+    out_h = output_spatial_size(H, kernel_h, stride, padding)
+    out_w = output_spatial_size(W, kernel_w, stride, padding)
+    # Step 4: Each output row stores one flattened receptive field.
+    # Number of rows: N * out_h * out_w
+    # Number of columns: C * kernel_h * kernel_w
+    cols = np.zeros(
+        (N * out_h * out_w,
+         C * kernel_h * kernel_w),
+        dtype=images.dtype
+    )
+    # Step 5: Extract every sliding window.
+    row = 0
+    for n in range(N):
+        for out_i in range(out_h):
+            for out_j in range(out_w):
+                # Top-left corner of the current receptive field.
+                h_start = out_i * stride
+                w_start = out_j * stride
+                # Slice out the patch.
+                patch = padded[
+                    n,
+                    :,
+                    h_start:h_start + kernel_h,
+                    w_start:w_start + kernel_w
+                ]
+                # Flatten channel-major and store.
+                cols[row] = patch.reshape(-1)
+                row += 1
+    return cols
 
 # Step 16 - col2im (not yet solved)
 # TODO: implement
