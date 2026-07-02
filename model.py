@@ -18,7 +18,6 @@ def argmax_rows(matrix):
 import numpy as np
 
 def row_max(matrix):
-    # TODO: return the maximum value of each row of `matrix` with keepdims True for broadcasting.
     matrix = np.asarray(matrix)
     row_maxes = np.max(matrix, axis=1, keepdims=True)
     return row_maxes
