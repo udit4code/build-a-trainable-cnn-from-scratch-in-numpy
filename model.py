@@ -27,7 +27,6 @@ import numpy as np
 
 def row_sum(matrix):
     """Return per-row sums of a 2D array with shape (N, 1)."""
-    # TODO: return the sum along axis 1 keeping the reduced dimension
     matrix = np.asarray(matrix)
     row_sums = np.sum(matrix, axis=1, keepdims=True)
     return row_sums
