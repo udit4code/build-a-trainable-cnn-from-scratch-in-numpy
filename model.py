@@ -125,8 +125,11 @@ def he_init(shape, fan_in, seed):
     # Step 4: Return the weights as a float64 ndarray.
     return np.asarray(weights, dtype=np.float64)
 
-# Step 12 - init_zero_bias (not yet solved)
-# TODO: implement
+# Step 12 - init_zero_bias
+import numpy as np
+
+def init_zero_bias(length):
+    return np.zeros(length)
 
 # Step 13 - pad_2d (not yet solved)
 # TODO: implement
