@@ -129,7 +129,7 @@ def he_init(shape, fan_in, seed):
 import numpy as np
 
 def init_zero_bias(length):
-    return np.zeros(length)
+    return np.zeros(length, dtype=np.float64)
 
 # Step 13 - pad_2d (not yet solved)
 # TODO: implement
