@@ -135,7 +135,29 @@ def init_zero_bias(length):
 # Step 13 - pad_2d
 import numpy as np
 
+
+import numpy as np
+
 def pad_2d(images, pad):
+    # Step 1: If no padding is requested, return the input unchanged.
+    if pad == 0:
+        return images
+    # Step 2: Pad only the spatial dimensions (H and W).
+    # images has shape (N, C, H, W), so the padding specification is:
+    #   - Batch dimension (N):   no padding
+    #   - Channel dimension (C): no padding
+    #   - Height dimension (H):  pad `pad` rows on top and bottom
+    #   - Width dimension (W):   pad `pad` columns on left and right
+    padded_images = np.pad(
+        images,
+        pad_width=((0, 0), (0, 0), (pad, pad), (pad, pad)),
+        mode="constant",
+        constant_values=0
+    )
+    # Step 3: Return the zero-padded tensor.
+    return padded_images
+
+def pad_2d_without_numpy_pad_function(images, pad):
     # Step 1: If no padding is requested, return the input unchanged.
     if pad == 0:
         return images
