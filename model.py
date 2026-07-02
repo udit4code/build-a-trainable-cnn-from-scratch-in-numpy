@@ -169,6 +169,10 @@ def pad_2d_without_numpy_pad_function(images, pad):
         dtype=images.dtype
     )
     # Step 4: Copy the original images into the center.
+    # Axis 0 = Batch (N) -> Copy Everything from this Axis, So, we use :
+    # Axis 1 = Channel (C) -> Copy Everything from this Axis, So, we use :
+    # Axis 2 = Height (H) -> So, in the new padded tensor, for this dimension, we go from pad to pad + H - 1. 
+    # Axis 3 = Width (W) -> So, in the new padded tensor, for this dimension, we go from pad to pad + W - 1
     padded[:, :, pad:pad + H, pad:pad + W] = images
     # Step 5: Return the padded tensor.
     return padded
