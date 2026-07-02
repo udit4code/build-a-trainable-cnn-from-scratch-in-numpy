@@ -430,60 +430,24 @@ def conv2d_grad_input(d_out, cache):
     padding = cache["padding"]
     kernel_h = cache["kernel_h"]
     kernel_w = cache["kernel_w"]
-
     N, C_out, out_h, out_w = d_out.shape
-
-    # ------------------------------------------------------------
     # Step 2: Flatten the convolution filters.
-    #
-    # Original:
-    # (C_out, C_in, kh, kw)
-    #
-    # Flattened:
-    # (C_out, C_in*kh*kw)
-    # ------------------------------------------------------------
+    # Original: (C_out, C_in, kh, kw)
+    # Flattened: (C_out, C_in*kh*kw)
     weight_matrix = weights.reshape(C_out, -1)
-
-    # ------------------------------------------------------------
     # Step 3: Reorder d_out so each row corresponds to one receptive
     # field, matching the layout used in conv2d_forward().
-    #
-    # Current:
-    # (N, C_out, out_h, out_w)
-    #
-    # Desired:
-    # (N*out_h*out_w, C_out)
-    # ------------------------------------------------------------
-    d_out_row = (
-        d_out
-        .transpose(0, 2, 3, 1)
-        .reshape(-1, C_out)
-    )
-
-    # ------------------------------------------------------------
+    # Current: (N, C_out, out_h, out_w)
+    # Desired: (N*out_h*out_w, C_out)
+    d_out_row = (d_out.transpose(0, 2, 3, 1).reshape(-1, C_out))
     # Step 4: Backpropagate through the matrix multiplication.
-    #
     # Forward:
     # cols @ weight_matrix.T
-    #
     # Therefore:
     # d_cols = d_out_row @ weight_matrix
-    # ------------------------------------------------------------
     d_cols = d_out_row @ weight_matrix
-
-    # ------------------------------------------------------------
-    # Step 5: Fold the column gradients back into the original image
-    # layout, accumulating overlapping regions.
-    # ------------------------------------------------------------
-    dx = col2im(
-        d_cols,
-        x_shape,
-        kernel_h,
-        kernel_w,
-        stride,
-        padding
-    )
-
+    # Step 5: Fold the column gradients back into the original image layout, accumulating overlapping regions.
+    dx = col2im(d_cols,x_shape,kernel_h,kernel_w,stride,padding)
     return dx
 
 # Step 19 - conv2d_grad_weights (not yet solved)
