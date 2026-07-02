@@ -191,7 +191,52 @@ def output_spatial_size(input_size, kernel, stride, padding):
 # Step 15 - im2col
 import numpy as np
 
+from numpy.lib.stride_tricks import sliding_window_view
+
 def im2col(images, kernel_h, kernel_w, stride, padding):
+    # Step 1: Zero-pad the input images.
+    padded = pad_2d(images, padding)
+    # Step 2: Read the input dimensions.
+    N, C, H, W = images.shape
+    # Step 3: Compute the spatial dimensions of the output feature map.
+    out_h = output_spatial_size(H, kernel_h, stride, padding)
+    out_w = output_spatial_size(W, kernel_w, stride, padding)
+    # Optimization 1:
+    # Use sliding_window_view() to create a view of ALL receptive fields
+    # simultaneously. This avoids explicit Python loops over every output
+    # location and does NOT copy the underlying image data.
+    #
+    # Resulting shape:
+    # (N, C, H', W', kernel_h, kernel_w)
+    windows = sliding_window_view(
+        padded,
+        (kernel_h, kernel_w),
+        axis=(2, 3)
+    )
+
+    # Optimization 2:
+    # Apply the convolution stride by slicing the window dimensions.
+    # This is a view operation (no data copy).
+    # Shape becomes:
+    # (N, C, out_h, out_w, kernel_h, kernel_w)
+    windows = windows[:, :, ::stride, ::stride, :, :]
+    # Optimization 3:
+    # Reorder the axes so that each receptive field comes first.
+    # Current:
+    # (N, C, out_h, out_w, kh, kw)
+    # Desired:
+    # (N, out_h, out_w, C, kh, kw)
+    # transpose() is also a view (no copy).
+    windows = windows.transpose(0, 2, 3, 1, 4, 5)
+    # Optimization 4:
+    # Flatten each receptive field into one row.
+    # Only this final reshape may require a contiguous copy.
+    # Final shape:
+    # (N * out_h * out_w, C * kernel_h * kernel_w)
+    cols = windows.reshape(N * out_h * out_w, C * kernel_h * kernel_w)
+    return cols
+
+def im2col_naive(images, kernel_h, kernel_w, stride, padding):
     # Step 1: Zero-pad the input images.
     padded = pad_2d(images, padding)
     # Step 2: Read the original input dimensions.
@@ -229,8 +274,52 @@ def im2col(images, kernel_h, kernel_w, stride, padding):
 
 # Step 16 - col2im
 import numpy as np
+from numpy.lib.stride_tricks import sliding_window_view
 
-def col2im(cols, input_shape, kernel_h, kernel_w, stride, padding):
+def im2col(images, kernel_h, kernel_w, stride, padding):
+    # Step 1: Zero-pad the input images.
+    padded = pad_2d(images, padding)
+    # Step 2: Read the input dimensions.
+    N, C, H, W = images.shape
+    # Step 3: Compute the spatial dimensions of the output feature map.
+    out_h = output_spatial_size(H, kernel_h, stride, padding)
+    out_w = output_spatial_size(W, kernel_w, stride, padding)
+    # Optimization 1:
+    # Use sliding_window_view() to create a view of ALL receptive fields
+    # simultaneously. This avoids explicit Python loops over every output
+    # location and does NOT copy the underlying image data.
+    #
+    # Resulting shape:
+    # (N, C, H', W', kernel_h, kernel_w)
+    windows = sliding_window_view(
+        padded,
+        (kernel_h, kernel_w),
+        axis=(2, 3)
+    )
+
+    # Optimization 2:
+    # Apply the convolution stride by slicing the window dimensions.
+    # This is a view operation (no data copy).
+    # Shape becomes:
+    # (N, C, out_h, out_w, kernel_h, kernel_w)
+    windows = windows[:, :, ::stride, ::stride, :, :]
+    # Optimization 3:
+    # Reorder the axes so that each receptive field comes first.
+    # Current:
+    # (N, C, out_h, out_w, kh, kw)
+    # Desired:
+    # (N, out_h, out_w, C, kh, kw)
+    # transpose() is also a view (no copy).
+    windows = windows.transpose(0, 2, 3, 1, 4, 5)
+    # Optimization 4:
+    # Flatten each receptive field into one row.
+    # Only this final reshape may require a contiguous copy.
+    # Final shape:
+    # (N * out_h * out_w, C * kernel_h * kernel_w)
+    cols = windows.reshape(N * out_h * out_w, C * kernel_h * kernel_w)
+    return cols
+
+def col2im_naive(cols, input_shape, kernel_h, kernel_w, stride, padding):
     # Step 1: Read the dimensions of the original input tensor.
     N, C, H, W = input_shape
     # Step 2: Compute the spatial dimensions of the convolution output.
