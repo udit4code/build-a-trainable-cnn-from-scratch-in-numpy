@@ -227,8 +227,48 @@ def im2col(images, kernel_h, kernel_w, stride, padding):
                 row += 1
     return cols
 
-# Step 16 - col2im (not yet solved)
-# TODO: implement
+# Step 16 - col2im
+import numpy as np
+
+def col2im(cols, input_shape, kernel_h, kernel_w, stride, padding):
+    # Step 1: Read the dimensions of the original input tensor.
+    N, C, H, W = input_shape
+    # Step 2: Compute the spatial dimensions of the convolution output.
+    out_h = output_spatial_size(H, kernel_h, stride, padding)
+    out_w = output_spatial_size(W, kernel_w, stride, padding)
+    # Step 3: Allocate a zero-padded tensor that will accumulate the reconstructed patches.
+    padded = np.zeros(
+        (N,
+         C,
+         H + 2 * padding,
+         W + 2 * padding),
+        dtype=cols.dtype
+    )
+    # Step 4: Each row of cols corresponds to one sliding-window patch.
+    row = 0
+    for n in range(N):
+        for out_i in range(out_h):
+            for out_j in range(out_w):
+                # Recover the patch stored in this row.
+                patch = cols[row].reshape(C, kernel_h, kernel_w)
+                # Compute the top-left corner of this patch in the
+                # padded image.
+                h_start = out_i * stride
+                w_start = out_j * stride
+                # Add the patch back into the padded tensor.
+                # Use += because multiple patches overlap.
+                padded[
+                    n,
+                    :,
+                    h_start:h_start + kernel_h,
+                    w_start:w_start + kernel_w
+                ] += patch
+                row += 1
+
+    # Step 5: Remove the padding before returning.
+    if padding == 0:
+        return padded
+    return padded[:,:,padding:padding + H,padding:padding + W]
 
 # Step 17 - conv2d_forward (not yet solved)
 # TODO: implement
