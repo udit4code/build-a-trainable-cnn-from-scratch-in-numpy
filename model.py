@@ -129,6 +129,7 @@ def he_init(shape, fan_in, seed):
 import numpy as np
 
 def init_zero_bias(length):
+    # We use float64 so that downstream gradient updates accumulate cleanly. 
     return np.zeros(length, dtype=np.float64)
 
 # Step 13 - pad_2d (not yet solved)
