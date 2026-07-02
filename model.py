@@ -104,8 +104,26 @@ import numpy as np
 def he_std(fan_in):
     return np.sqrt(2/fan_in)
 
-# Step 11 - he_init (not yet solved)
-# TODO: implement
+# Step 11 - he_init
+import numpy as np
+
+def he_init(shape, fan_in, seed):
+    # Step 1: Seed NumPy's global random number generator so that
+    # the same seed always produces the same initialized weights.
+    np.random.seed(seed)
+    # Step 2: Compute the standard deviation according to
+    # He initialization.
+    std = he_std(fan_in)
+    # Step 3: Sample weights from a zero-mean normal distribution
+    # with the computed standard deviation.
+    weights = np.random.normal(
+        loc=0.0,
+        scale=std,
+        size=shape
+    )
+
+    # Step 4: Return the weights as a float64 ndarray.
+    return np.asarray(weights, dtype=np.float64)
 
 # Step 12 - init_zero_bias (not yet solved)
 # TODO: implement
