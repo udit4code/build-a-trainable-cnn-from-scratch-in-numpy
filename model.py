@@ -98,8 +98,11 @@ def accuracy(logits_or_probs, labels):
     # and return the fraction of correct predictions.
     return np.mean(predictions == labels)
 
-# Step 10 - he_std (not yet solved)
-# TODO: implement
+# Step 10 - he_std
+import numpy as np 
+
+def he_std(fan_in):
+    return np.sqrt(2/fan_in)
 
 # Step 11 - he_init (not yet solved)
 # TODO: implement
