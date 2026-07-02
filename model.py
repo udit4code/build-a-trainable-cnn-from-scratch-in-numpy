@@ -193,6 +193,16 @@ import numpy as np
 
 from numpy.lib.stride_tricks import sliding_window_view
 
+# The asymptotic time complexity of vectorized im2col is the same as the loop-based implementation.  
+# Time Complexity = O(N x out_h x out_w x C x kernel_h x kernel_w)
+# because every value in every receptive field must ultimately appear in the output.
+
+# However, the constant factors are much lower because:
+# 1. Python loop overhead is eliminated.
+# 2. Most operations are implemented in optimized C, instead of at the python layer.
+# 3. Intermediate operations use views rather than allocating and copying data repeatedly.
+
+
 def im2col(images, kernel_h, kernel_w, stride, padding):
     # Step 1: Zero-pad the input images.
     padded = pad_2d(images, padding)
