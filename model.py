@@ -1317,8 +1317,64 @@ def train_one_epoch(params, opt_state, x, y,
     # step counter, and batch losses.
     return params, opt_state, step_counter, losses
 
-# Step 58 - train_loop (not yet solved)
-# TODO: implement
+# Step 58 - train_loop
+import numpy as np
+
+def train_loop(
+    params,
+    x_train,
+    y_train,
+    num_epochs,
+    batch_size,
+    lr=1e-3,
+    beta_one=0.9,
+    beta_two=0.999,
+    eps=1e-8,
+    seed=0
+):
+    # Step 1: Initialize the Adam optimizer state.
+    # Each parameter (weight or bias) keeps its own first (m)
+    # and second (v) moment estimates, both initialized to zero.
+    opt_state = {}
+
+    for layer_name, layer_params in params.items():
+        opt_state[layer_name] = {}
+
+        for pname in ("W", "b"):
+            opt_state[layer_name][pname] = {
+                "m": np.zeros_like(layer_params[pname]),
+                "v": np.zeros_like(layer_params[pname])
+            }
+
+    # Step 2: Initialize the global Adam step counter.
+    step_counter = 0
+
+    # Step 3: Store the loss from every mini-batch across all epochs.
+    loss_history = []
+
+    # Step 4: Train for the requested number of epochs.
+    for epoch in range(num_epochs):
+        params, opt_state, step_counter, epoch_losses = train_one_epoch(
+            params=params,
+            opt_state=opt_state,
+            x=x_train,
+            y=y_train,
+            batch_size=batch_size,
+            lr=lr,
+            beta_one=beta_one,
+            beta_two=beta_two,
+            eps=eps,
+            step_counter=step_counter,
+            # Use a different (but reproducible) shuffle each epoch.
+            seed=seed + epoch
+        )
+
+        # Step 5: Append this epoch's losses to the full history.
+        loss_history.extend(epoch_losses)
+
+    # Step 6: Return the trained parameters and the complete
+    # per-mini-batch loss history.
+    return params, loss_history
 
 # Step 59 - evaluate (not yet solved)
 # TODO: implement
