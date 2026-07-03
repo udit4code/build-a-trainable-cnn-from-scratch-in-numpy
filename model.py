@@ -502,8 +502,53 @@ def conv2d_backward(d_out, cache):
     # Step 4: Return all gradients in the same order expected by the optimizer.
     return dx, dW, db
 
-# Step 22 - maxpool2d_forward (not yet solved)
-# TODO: implement
+# Step 22 - maxpool2d_forward
+import numpy as np
+
+def maxpool2d_forward(x, kernel, stride):
+    # Step 1: Read the dimensions of the input tensor.
+    N, C, H, W = x.shape
+    # Step 2: Compute the spatial dimensions of the pooled output.
+    out_h = output_spatial_size(H, kernel, stride, padding=0)
+    out_w = output_spatial_size(W, kernel, stride, padding=0)
+    # Step 3: Allocate the output feature map.
+    out = np.zeros((N, C, out_h, out_w), dtype=x.dtype)
+    # Step 4: Allocate a tensor to store the index of the maximum element inside each pooling window.
+    # Shape: (N, C, out_h, out_w)
+    # Each entry stores an integer in [0, kernel * kernel)
+    argmax = np.zeros(
+        (N, C, out_h, out_w),
+        dtype=np.int64
+    )
+    # Step 5: Iterate over every pooling window.
+    for n in range(N):
+        for c in range(C):
+            for out_i in range(out_h):
+                for out_j in range(out_w):
+                    # Compute the top-left corner of this window.
+                    h_start = out_i * stride
+                    w_start = out_j * stride
+                    # Extract the pooling window.
+                    window = x[
+                        n,
+                        c,
+                        h_start:h_start + kernel,
+                        w_start:w_start + kernel
+                    ]
+                    # Store the maximum value.
+                    out[n, c, out_i, out_j] = np.max(window)
+                    # Store the flat index of the maximum element.
+                    # The index is relative to the window, not the original image.
+                    argmax[n, c, out_i, out_j] = np.argmax(window)
+
+    # Step 6: Save everything needed for the backward pass.
+    cache = {
+        "x_shape": x.shape,
+        "argmax": argmax,
+        "kernel": kernel,
+        "stride": stride
+    }
+    return out, cache
 
 # Step 23 - scatter_grad_window (not yet solved)
 # TODO: implement
