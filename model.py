@@ -663,8 +663,24 @@ def flatten_backward(d_out, cache):
     # Step 3: Return the input gradient.
     return dx
 
-# Step 29 - linear_forward (not yet solved)
-# TODO: implement
+# Step 29 - linear_forward
+import numpy as np
+
+def linear_forward(x, weights, bias):
+    # Step 1: Compute the affine transformation.
+    # x: (N, D_in)
+    # weights: (D_in, D_out)
+    # bias: (D_out,)
+    # Output: (N, D_out)
+    # NumPy automatically broadcasts the bias across all samples.
+    out = x @ weights + bias
+    # Step 2: Cache the tensors needed during the backward pass.
+    cache = {
+        "x": x,
+        "weights": weights
+    }
+    # Step 3: Return the output and cache.
+    return out, cache
 
 # Step 30 - linear_grad_input (not yet solved)
 # TODO: implement
