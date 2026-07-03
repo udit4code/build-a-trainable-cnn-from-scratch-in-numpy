@@ -734,14 +734,14 @@ def linear_backward(dout, cache):
     return dx, dW, db
 
 # Step 34 - softmax_cross_entropy_forward
-import numpy as np
-
 def softmax_cross_entropy_forward(logits, y):
     # Step 1: Convert the raw logits into probabilities using a numerically stable softmax.
     probs = stable_softmax(logits)
     # Step 2: Compute the mean cross-entropy loss using the predicted probabilities and the ground-truth labels.
     loss = cross_entropy_loss(probs, y)
-    # Step 3: Return the loss as a Python float.
+    # Step 3: Normalize -0.0 to +0.0 if necessary.
+    if loss == 0.0:
+        loss = 0.0
     return float(loss)
 
 # Step 35 - softmax_cross_entropy_backward (not yet solved)
