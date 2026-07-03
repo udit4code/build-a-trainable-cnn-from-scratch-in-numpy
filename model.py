@@ -801,8 +801,18 @@ def adam_bias_correct(moment, beta, t):
     # Step 2: Return the bias-corrected moment.
     return corrected_moment
 
-# Step 40 - adam_param_step (not yet solved)
-# TODO: implement
+# Step 40 - adam_param_step
+import numpy as np
+
+def adam_param_step(param, m_hat, v_hat, lr, eps):
+    # Step 1: Compute the Adam parameter update.
+    # Divide the bias-corrected first moment by the square root
+    # of the bias-corrected second moment. The small epsilon
+    # prevents division by zero and improves numerical stability.
+    updated_param = param - lr * m_hat / (np.sqrt(v_hat) + eps)
+    # Step 2: Return the updated parameter array.
+    # The original parameter tensor is left unchanged.
+    return updated_param
 
 # Step 41 - adam_step (not yet solved)
 # TODO: implement
