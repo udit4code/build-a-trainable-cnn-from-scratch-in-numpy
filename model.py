@@ -1210,10 +1210,8 @@ def train_test_split(x, y, test_fraction=0.2, seed=0):
     # Step 5: Index both x and y with the same shuffled indices.
     x_train = x[train_indices]
     y_train = y[train_indices]
-
     x_test = x[test_indices]
     y_test = y[test_indices]
-
     # Step 6: Return the train/test split.
     return x_train, y_train, x_test, y_test
 
