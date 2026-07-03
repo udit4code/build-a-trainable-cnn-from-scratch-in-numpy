@@ -947,8 +947,36 @@ def forward_conv_block(x, W, b, pool_size, stride, pad):
     # Step 5: Return the pooled output and cache.
     return out, cache
 
-# Step 46 - forward_classifier_block (not yet solved)
-# TODO: implement
+# Step 46 - forward_classifier_block
+import numpy as np
+
+def forward_classifier_block(x, fc1, fc2):
+    # Step 1: Flatten the convolutional feature maps into
+    # a 2D batch matrix.
+    flatten_out, flatten_cache = flatten_forward(x)
+    # Step 2: Apply the first fully-connected layer.
+    fc1_out, fc1_cache = linear_forward(
+        flatten_out,
+        fc1["W"],
+        fc1["b"]
+    )
+    # Step 3: Apply the ReLU activation.
+    relu_out, relu_cache = relu_forward(fc1_out)
+    # Step 4: Apply the final fully-connected layer to produce the class logits.
+    logits, fc2_cache = linear_forward(
+        relu_out,
+        fc2["W"],
+        fc2["b"]
+    )
+    # Step 5: Bundle all caches required by the backward pass.
+    cache = {
+        "flatten_cache": flatten_cache,
+        "fc1_cache": fc1_cache,
+        "relu_cache": relu_cache,
+        "fc2_cache": fc2_cache
+    }
+    # Step 6: Return the logits and cache.
+    return logits, cache
 
 # Step 47 - lenet_forward (not yet solved)
 # TODO: implement
