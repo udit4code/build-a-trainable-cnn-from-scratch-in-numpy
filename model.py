@@ -814,8 +814,23 @@ def adam_param_step(param, m_hat, v_hat, lr, eps):
     # The original parameter tensor is left unchanged.
     return updated_param
 
-# Step 41 - adam_step (not yet solved)
-# TODO: implement
+# Step 41 - adam_step
+import numpy as np
+
+def adam_step(param, grad, m, v, t, lr, beta_one, beta_two, eps):
+    # Step 1: Update the first moment (running average of gradients).
+    new_m = adam_update_m(m, grad, beta_one)
+    # Step 2: Update the second moment (running average of squared gradients).
+    new_v = adam_update_v(v, grad, beta_two)
+    # Step 3: Compute the bias-corrected first moment.
+    m_hat = adam_bias_correct(new_m, beta_one, t)
+    # Step 4: Compute the bias-corrected second moment.
+    v_hat = adam_bias_correct(new_v, beta_two, t)
+    # Step 5: Update the parameter using the bias-corrected moments.
+    new_param = adam_param_step(param, m_hat, v_hat, lr, eps)
+    # Step 6: Return the updated parameter together with the
+    # new (uncorrected) moments for the next optimization step.
+    return new_param, new_m, new_v
 
 # Step 42 - init_conv_layer (not yet solved)
 # TODO: implement
