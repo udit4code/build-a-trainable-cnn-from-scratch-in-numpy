@@ -708,8 +708,16 @@ def linear_grad_weights(x, dout):
     # Step 2: Return the weight gradient.
     return dW
 
-# Step 32 - linear_grad_bias (not yet solved)
-# TODO: implement
+# Step 32 - linear_grad_bias
+import numpy as np
+
+def linear_grad_bias(dout):
+    # Step 1: Sum the upstream gradient across the batch dimension.
+    # dout: (N, D_out)
+    # Result: (D_out,)
+    db = np.sum(dout, axis=0)
+    # Step 2: Return the bias gradient.
+    return db
 
 # Step 33 - linear_backward (not yet solved)
 # TODO: implement
