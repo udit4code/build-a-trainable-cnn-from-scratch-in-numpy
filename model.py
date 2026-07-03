@@ -1242,16 +1242,11 @@ def train_step(params, opt_state, xb, yb,
     loss = softmax_cross_entropy_forward(logits, yb)
     # Step 3: Compute the gradient of the loss with respect to the logits.
     dlogits = softmax_cross_entropy_backward(logits, yb)
-
-    # Step 4: Backpropagate through the network to obtain
-    # gradients for every learnable parameter.
+    # Step 4: Backpropagate through the network to obtain gradients for every learnable parameter.
     grads = lenet_backward(dlogits, caches)
-
-    # Step 5: Create dictionaries for the updated parameters
-    # and optimizer state.
+    # Step 5: Create dictionaries for the updated parameters and optimizer state.
     new_params = {}
     new_opt_state = {}
-
     # Step 6: Update every weight and bias tensor using Adam.
     for layer_name in params:
         new_params[layer_name] = {}
@@ -1260,10 +1255,8 @@ def train_step(params, opt_state, xb, yb,
         for pname in ("W", "b"):
             param = params[layer_name][pname]
             grad = grads[layer_name]["d" + pname]
-
             m = opt_state[layer_name][pname]["m"]
             v = opt_state[layer_name][pname]["v"]
-
             # Apply one Adam optimization step.
             new_param, new_m, new_v = adam_step(
                 param,
@@ -1276,16 +1269,13 @@ def train_step(params, opt_state, xb, yb,
                 beta_two,
                 eps
             )
-
             # Store the updated parameter.
             new_params[layer_name][pname] = new_param
-
             # Store the updated optimizer state.
             new_opt_state[layer_name][pname] = {
                 "m": new_m,
                 "v": new_v
             }
-
     # Step 7: Return the updated model, optimizer state,
     # and scalar training loss.
     return new_params, new_opt_state, loss
