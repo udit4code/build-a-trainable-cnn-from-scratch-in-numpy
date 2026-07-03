@@ -489,8 +489,18 @@ def conv2d_grad_bias(d_out):
     # each output channel.
     return np.sum(d_out, axis=(0, 2, 3))
 
-# Step 21 - conv2d_backward (not yet solved)
-# TODO: implement
+# Step 21 - conv2d_backward
+import numpy as np
+
+def conv2d_backward(d_out, cache):
+    # Step 1: Compute the gradient with respect to the input tensor.
+    dx = conv2d_grad_input(d_out, cache)
+    # Step 2: Compute the gradient with respect to the convolution filters (weights).
+    dW = conv2d_grad_weights(d_out, cache)
+    # Step 3: Compute the gradient with respect to the bias.
+    db = conv2d_grad_bias(d_out)
+    # Step 4: Return all gradients in the same order expected by the optimizer.
+    return dx, dW, db
 
 # Step 22 - maxpool2d_forward (not yet solved)
 # TODO: implement
