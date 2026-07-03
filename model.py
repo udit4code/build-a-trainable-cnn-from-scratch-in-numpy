@@ -781,8 +781,15 @@ def adam_update_m(m, grad, beta_one):
     # Step 2: Return the updated first moment estimate.
     return new_m
 
-# Step 38 - adam_update_v (not yet solved)
-# TODO: implement
+# Step 38 - adam_update_v
+import numpy as np
+
+def adam_update_v(v, grad, beta_two):
+    # Step 1: Update the second moment estimate using an exponential moving average (EMA) of the squared gradients.
+    # v_t = beta_two * v_{t-1} + (1 - beta_two) * (grad ** 2)
+    new_v = beta_two * v + (1.0 - beta_two) * (grad ** 2)
+    # Step 2: Return the updated second moment estimate.
+    return new_v
 
 # Step 39 - adam_bias_correct (not yet solved)
 # TODO: implement
