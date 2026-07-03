@@ -1231,8 +1231,64 @@ def iterate_minibatches(x, y, batch_size, seed=0):
         # Step 5: Yield the corresponding feature and label batches.
         yield x[batch_indices], y[batch_indices]
 
-# Step 56 - train_step (not yet solved)
-# TODO: implement
+# Step 56 - train_step
+import numpy as np
+
+def train_step(params, opt_state, xb, yb,
+               lr, beta_one, beta_two, eps, step):
+    # Step 1: Run the forward pass through the network.
+    logits, caches = lenet_forward(xb, params)
+    # Step 2: Compute the mean cross-entropy loss.
+    loss = softmax_cross_entropy_forward(logits, yb)
+    # Step 3: Compute the gradient of the loss with respect to the logits.
+    dlogits = softmax_cross_entropy_backward(logits, yb)
+
+    # Step 4: Backpropagate through the network to obtain
+    # gradients for every learnable parameter.
+    grads = lenet_backward(dlogits, caches)
+
+    # Step 5: Create dictionaries for the updated parameters
+    # and optimizer state.
+    new_params = {}
+    new_opt_state = {}
+
+    # Step 6: Update every weight and bias tensor using Adam.
+    for layer_name in params:
+        new_params[layer_name] = {}
+        new_opt_state[layer_name] = {}
+
+        for pname in ("W", "b"):
+            param = params[layer_name][pname]
+            grad = grads[layer_name]["d" + pname]
+
+            m = opt_state[layer_name][pname]["m"]
+            v = opt_state[layer_name][pname]["v"]
+
+            # Apply one Adam optimization step.
+            new_param, new_m, new_v = adam_step(
+                param,
+                grad,
+                m,
+                v,
+                step,
+                lr,
+                beta_one,
+                beta_two,
+                eps
+            )
+
+            # Store the updated parameter.
+            new_params[layer_name][pname] = new_param
+
+            # Store the updated optimizer state.
+            new_opt_state[layer_name][pname] = {
+                "m": new_m,
+                "v": new_v
+            }
+
+    # Step 7: Return the updated model, optimizer state,
+    # and scalar training loss.
+    return new_params, new_opt_state, loss
 
 # Step 57 - train_one_epoch (not yet solved)
 # TODO: implement
