@@ -1046,8 +1046,42 @@ def backward_conv_block(dout, cache):
     # Step 4: Return the gradients.
     return dx, dW, db
 
-# Step 49 - backward_classifier_block (not yet solved)
-# TODO: implement
+# Step 49 - backward_classifier_block
+import numpy as np
+
+def backward_classifier_block(dlogits, cache):
+    # Step 1: Backpropagate through the second fully-connected layer.
+    d_relu, dW2, db2 = linear_backward(
+        dlogits,
+        cache["fc2_cache"]
+    )
+    # Step 2: Backpropagate through the ReLU activation.
+    d_fc1 = relu_backward(
+        d_relu,
+        cache["relu_cache"]
+    )
+    # Step 3: Backpropagate through the first fully-connected layer.
+    d_flatten, dW1, db1 = linear_backward(
+        d_fc1,
+        cache["fc1_cache"]
+    )
+    # Step 4: Restore the gradient to the original 4D feature-map shape before flattening.
+    dx = flatten_backward(
+        d_flatten,
+        cache["flatten_cache"]
+    )
+    # Step 5: Return the input gradient and the gradients for both fully-connected layers.
+    return {
+        "dx": dx,
+        "fc1": {
+            "dW": dW1,
+            "db": db1
+        },
+        "fc2": {
+            "dW": dW2,
+            "db": db2
+        }
+    }
 
 # Step 50 - lenet_backward (not yet solved)
 # TODO: implement
