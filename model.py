@@ -719,8 +719,19 @@ def linear_grad_bias(dout):
     # Step 2: Return the bias gradient.
     return db
 
-# Step 33 - linear_backward (not yet solved)
-# TODO: implement
+# Step 33 - linear_backward
+import numpy as np
+
+def linear_backward(dout, cache):
+    # Step 1: Compute the gradient with respect to the layer input.
+    dx = linear_grad_input(dout, cache)
+    # Step 2: Compute the gradient with respect to the weight matrix.
+    # The input activations are retrieved from the forward-pass cache.
+    dW = linear_grad_weights(cache["x"], dout)
+    # Step 3: Compute the gradient with respect to the bias vector.
+    db = linear_grad_bias(dout)
+    # Step 4: Return all gradients in the order expected by the optimizer and the rest of the network.
+    return dx, dW, db
 
 # Step 34 - softmax_cross_entropy_forward (not yet solved)
 # TODO: implement
