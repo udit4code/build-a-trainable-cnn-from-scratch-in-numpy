@@ -733,8 +733,16 @@ def linear_backward(dout, cache):
     # Step 4: Return all gradients in the order expected by the optimizer and the rest of the network.
     return dx, dW, db
 
-# Step 34 - softmax_cross_entropy_forward (not yet solved)
-# TODO: implement
+# Step 34 - softmax_cross_entropy_forward
+import numpy as np
+
+def softmax_cross_entropy_forward(logits, y):
+    # Step 1: Convert the raw logits into probabilities using a numerically stable softmax.
+    probs = stable_softmax(logits)
+    # Step 2: Compute the mean cross-entropy loss using the predicted probabilities and the ground-truth labels.
+    loss = cross_entropy_loss(probs, y)
+    # Step 3: Return the loss as a Python float.
+    return float(loss)
 
 # Step 35 - softmax_cross_entropy_backward (not yet solved)
 # TODO: implement
