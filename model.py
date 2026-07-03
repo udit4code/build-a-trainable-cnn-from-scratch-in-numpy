@@ -1372,6 +1372,14 @@ def train_loop(
     # Step 6: Return the trained parameters and the complete per-mini-batch loss history.
     return params, loss_history
 
-# Step 59 - evaluate (not yet solved)
-# TODO: implement
+# Step 59 - evaluate
+import numpy as np
+
+def evaluate(params, x, y):
+    # Step 1: Predict the class label for every sample in the batch.
+    predictions = lenet_predict(x, params)
+    # Step 2: Compute the fraction of correct predictions.
+    accuracy = np.mean(predictions == y)
+    # Step 3: Return the accuracy as a Python float.
+    return float(accuracy)
 
