@@ -1124,8 +1124,17 @@ def lenet_backward(dlogits, caches):
     # Step 5: Return all parameter gradients.
     return grads
 
-# Step 51 - lenet_predict (not yet solved)
-# TODO: implement
+# Step 51 - lenet_predict
+import numpy as np
+
+def lenet_predict(x, params):
+    # Step 1: Run the full forward pass to obtain the class logits.
+    logits, _ = lenet_forward(x, params)
+    # Step 2: Select the class with the largest logit for each
+    # sample in the batch.
+    predictions = argmax_rows(logits)
+    # Step 3: Return the predicted class indices.
+    return predictions
 
 # Step 52 - build_synthetic_image_dataset (not yet solved)
 # TODO: implement
