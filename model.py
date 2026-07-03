@@ -480,8 +480,14 @@ def conv2d_grad_weights(d_out, cache):
     d_weights = d_weight_matrix.reshape(C_out,C_in,kernel_h,kernel_w)
     return d_weights
 
-# Step 20 - conv2d_grad_bias (not yet solved)
-# TODO: implement
+# Step 20 - conv2d_grad_bias
+import numpy as np
+
+def conv2d_grad_bias(d_out):
+    # Step 1: Sum the upstream gradient over the batch dimension
+    # and both spatial dimensions. One gradient is produced for
+    # each output channel.
+    return np.sum(d_out, axis=(0, 2, 3))
 
 # Step 21 - conv2d_backward (not yet solved)
 # TODO: implement
