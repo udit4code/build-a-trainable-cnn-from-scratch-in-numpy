@@ -1185,11 +1185,9 @@ def build_synthetic_image_dataset(
 import numpy as np
 
 def shuffle_indices(n, seed=0):
-    # Step 1: Seed NumPy's legacy random number generator so
-    # the permutation is reproducible.
+    # Step 1: Seed NumPy's legacy random number generator so the permutation is reproducible.
     np.random.seed(seed)
-    # Step 2: Generate a random permutation of the integers
-    # from 0 to n-1.
+    # Step 2: Generate a random permutation of the integers from 0 to n-1.
     indices = np.random.permutation(n)
     # Step 3: Return the shuffled indices.
     return indices
