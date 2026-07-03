@@ -682,8 +682,19 @@ def linear_forward(x, weights, bias):
     # Step 3: Return the output and cache.
     return out, cache
 
-# Step 30 - linear_grad_input (not yet solved)
-# TODO: implement
+# Step 30 - linear_grad_input
+import numpy as np
+
+def linear_grad_input(d_out, cache):
+    """Gradient of a linear layer w.r.t. its input X."""
+    # Step 1: Retrieve the weight matrix saved during the forward pass.
+    weights = cache["weights"]
+    # Step 2: Backpropagate through the matrix multiplication.
+    # Forward: Y = X @ W
+    # Therefore: dX = dY @ W.T
+    dx = d_out @ weights.T
+    # Step 3: Return the input gradient.
+    return dx
 
 # Step 31 - linear_grad_weights (not yet solved)
 # TODO: implement
