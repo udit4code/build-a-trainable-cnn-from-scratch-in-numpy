@@ -858,8 +858,26 @@ def init_conv_layer(out_channels, in_channels, kernel_size, seed=0):
         "b": b
     }
 
-# Step 43 - init_linear_layer (not yet solved)
-# TODO: implement
+# Step 43 - init_linear_layer
+import numpy as np
+
+def init_linear_layer(in_features, out_features, seed=0):
+    # Step 1: Compute the fan-in for He initialization.
+    # Each output neuron receives all input features.
+    fan_in = in_features
+    # Step 2: Initialize the weight matrix using He initialization.
+    W = he_init(
+        shape=(in_features, out_features),
+        fan_in=fan_in,
+        seed=seed
+    )
+    # Step 3: Initialize the bias vector to zeros.
+    b = init_zero_bias(out_features)
+    # Step 4: Return the layer parameters.
+    return {
+        "W": W,
+        "b": b
+    }
 
 # Step 44 - init_lenet (not yet solved)
 # TODO: implement
