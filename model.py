@@ -879,8 +879,49 @@ def init_linear_layer(in_features, out_features, seed=0):
         "b": b
     }
 
-# Step 44 - init_lenet (not yet solved)
-# TODO: implement
+# Step 44 - init_lenet
+import numpy as np
+
+def init_lenet(in_channels, num_classes, seed=0):
+    # Step 1: Initialize the first convolution layer.
+    # Weight shape: (6, in_channels, 5, 5)
+    conv1 = init_conv_layer(
+        out_channels=6,
+        in_channels=in_channels,
+        kernel_size=5,
+        seed=seed
+    )
+    # Step 2: Initialize the second convolution layer.
+    # Weight shape: (16, 6, 5, 5)
+    conv2 = init_conv_layer(
+        out_channels=16,
+        in_channels=6,
+        kernel_size=5,
+        seed=seed + 1
+    )
+    # Step 3: After two 5×5 convolutions and two 2×2 pooling
+    # layers on a 28×28 input:
+    # 28 -> 24 -> 12 -> 8 -> 4
+    # The flattened feature size is:
+    # 16 × 4 × 4 = 256.
+    fc1 = init_linear_layer(
+        in_features=16 * 4 * 4,
+        out_features=120,
+        seed=seed + 2
+    )
+    # Step 4: Initialize the output classification layer.
+    fc2 = init_linear_layer(
+        in_features=120,
+        out_features=num_classes,
+        seed=seed + 3
+    )
+    # Step 5: Return all layer parameters.
+    return {
+        "conv1": conv1,
+        "conv2": conv2,
+        "fc1": fc1,
+        "fc2": fc2
+    }
 
 # Step 45 - forward_conv_block (not yet solved)
 # TODO: implement
