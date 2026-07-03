@@ -1022,8 +1022,29 @@ def lenet_forward(x, params):
     # Step 5: Return the logits and caches.
     return logits, caches
 
-# Step 48 - backward_conv_block (not yet solved)
-# TODO: implement
+# Step 48 - backward_conv_block
+import numpy as np
+
+def backward_conv_block(dout, cache):
+    # Step 1: Backpropagate through the max-pooling layer.
+    d_relu = maxpool2d_backward(
+        dout,
+        cache["pool_cache"]
+    )
+    # Step 2: Backpropagate through the ReLU activation.
+    d_conv = relu_backward(
+        d_relu,
+        cache["relu_cache"]
+    )
+    # Step 3: Backpropagate through the convolution layer.
+    # This returns the gradients with respect to the block input,
+    # convolution weights, and convolution bias.
+    dx, dW, db = conv2d_backward(
+        d_conv,
+        cache["conv_cache"]
+    )
+    # Step 4: Return the gradients.
+    return dx, dW, db
 
 # Step 49 - backward_classifier_block (not yet solved)
 # TODO: implement
