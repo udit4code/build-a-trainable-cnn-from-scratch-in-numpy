@@ -832,8 +832,31 @@ def adam_step(param, grad, m, v, t, lr, beta_one, beta_two, eps):
     # new (uncorrected) moments for the next optimization step.
     return new_param, new_m, new_v
 
-# Step 42 - init_conv_layer (not yet solved)
-# TODO: implement
+# Step 42 - init_conv_layer
+import numpy as np
+
+def init_conv_layer(out_channels, in_channels, kernel_size, seed=0):
+    # Step 1: Compute the fan-in for He initialization.
+    # Each output activation depends on all input channels and
+    # every element of the spatial kernel.
+    fan_in = in_channels * kernel_size * kernel_size
+    # Step 2: Initialize the convolution filters using He
+    # initialization.
+    W = he_init(
+        shape=(out_channels,
+               in_channels,
+               kernel_size,
+               kernel_size),
+        fan_in=fan_in,
+        seed=seed
+    )
+    # Step 3: Initialize the bias vector to zeros.
+    b = init_zero_bias(out_channels)
+    # Step 4: Return the layer parameters.
+    return {
+        "W": W,
+        "b": b
+    }
 
 # Step 43 - init_linear_layer (not yet solved)
 # TODO: implement
