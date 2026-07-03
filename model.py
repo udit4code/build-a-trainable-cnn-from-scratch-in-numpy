@@ -978,8 +978,49 @@ def forward_classifier_block(x, fc1, fc2):
     # Step 6: Return the logits and cache.
     return logits, cache
 
-# Step 47 - lenet_forward (not yet solved)
-# TODO: implement
+# Step 47 - lenet_forward
+import numpy as np
+
+def lenet_forward(x, params):
+    # Step 1: Run the first convolution block.
+    # Conv:
+    # kernel = 5
+    # stride = 1
+    # padding = 0
+    #
+    # Pool:
+    # 2x2 with stride 2
+    block1_out, block1_cache = forward_conv_block(
+        x,
+        params["conv1"]["W"],
+        params["conv1"]["b"],
+        pool_size=2,
+        stride=1,
+        pad=0
+    )
+    # Step 2: Run the second convolution block.
+    block2_out, block2_cache = forward_conv_block(
+        block1_out,
+        params["conv2"]["W"],
+        params["conv2"]["b"],
+        pool_size=2,
+        stride=1,
+        pad=0
+    )
+    # Step 3: Run the classifier block to produce the logits.
+    logits, classifier_cache = forward_classifier_block(
+        block2_out,
+        params["fc1"],
+        params["fc2"]
+    )
+    # Step 4: Bundle the caches for the backward pass.
+    caches = {
+        "block1": block1_cache,
+        "block2": block2_cache,
+        "classifier": classifier_cache
+    }
+    # Step 5: Return the logits and caches.
+    return logits, caches
 
 # Step 48 - backward_conv_block (not yet solved)
 # TODO: implement
