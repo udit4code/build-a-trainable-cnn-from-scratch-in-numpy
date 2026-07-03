@@ -761,8 +761,14 @@ def softmax_cross_entropy_backward(logits, y):
     dlogits[np.isclose(dlogits, 0.0)] = 0.0
     return dlogits
 
-# Step 36 - sgd_step (not yet solved)
-# TODO: implement
+# Step 36 - sgd_step
+import numpy as np
+
+def sgd_step(param, grad, lr):
+    # Step 1: Move the parameter in the direction opposite to the gradient. The learning rate controls the step size.
+    updated_param = param - lr * grad
+    # Step 2: Return the updated parameter tensor.
+    return updated_param
 
 # Step 37 - adam_update_m (not yet solved)
 # TODO: implement
