@@ -1295,12 +1295,7 @@ def train_one_epoch(params, opt_state, x, y,
     # mini-batch in this epoch.
     losses = []
     # Step 2: Iterate over one epoch of shuffled mini-batches.
-    for xb, yb in iterate_minibatches(
-        x,
-        y,
-        batch_size=batch_size,
-        seed=seed
-    ):
+    for xb, yb in iterate_minibatches(x,y,batch_size=batch_size,seed=seed):
         # Step 3: Advance the global Adam step counter.
         step_counter += 1
 
