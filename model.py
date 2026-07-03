@@ -629,8 +629,23 @@ def relu_backward(d_out, cache):
     # Step 4: Return the input gradient.
     return dx
 
-# Step 27 - flatten_forward (not yet solved)
-# TODO: implement
+# Step 27 - flatten_forward
+import numpy as np
+
+def flatten_forward(x):
+    # Step 1: Cache the original input shape.
+    # The backward pass needs this to restore the gradient to its original 4D layout.
+    cache = {
+        "x_shape": x.shape
+    }
+    # Step 2: Flatten each sample into a single row.
+    # Original shape:
+    # (N, C, H, W)
+    # New shape:
+    # (N, C * H * W)
+    out = x.reshape(x.shape[0], -1)
+    # Step 3: Return the flattened output and cache.
+    return out, cache
 
 # Step 28 - flatten_backward (not yet solved)
 # TODO: implement
