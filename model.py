@@ -1221,19 +1221,13 @@ import numpy as np
 def iterate_minibatches(x, y, batch_size, seed=0):
     # Step 1: Compute the number of samples.
     num_samples = x.shape[0]
-
-    # Step 2: Generate one shared shuffled ordering so that
-    # features and labels remain aligned.
+    # Step 2: Generate one shared shuffled ordering so that features and labels remain aligned.
     indices = shuffle_indices(num_samples, seed)
-
-    # Step 3: Walk through the shuffled indices in chunks of
-    # exactly batch_size. Stop before any incomplete batch.
+    # Step 3: Walk through the shuffled indices in chunks of exactly batch_size. Stop before any incomplete batch.
     for start in range(0, num_samples - batch_size + 1, batch_size):
         end = start + batch_size
-
         # Step 4: Select the indices belonging to this mini-batch.
         batch_indices = indices[start:end]
-
         # Step 5: Yield the corresponding feature and label batches.
         yield x[batch_indices], y[batch_indices]
 
