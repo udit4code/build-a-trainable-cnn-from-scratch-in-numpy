@@ -770,8 +770,16 @@ def sgd_step(param, grad, lr):
     # Step 2: Return the updated parameter tensor.
     return updated_param
 
-# Step 37 - adam_update_m (not yet solved)
-# TODO: implement
+# Step 37 - adam_update_m
+import numpy as np
+
+def adam_update_m(m, grad, beta_one):
+    # Step 1: Update the first moment estimate using an
+    # exponential moving average (EMA) of the gradients.
+    # m_t = beta_one * m_{t-1} + (1 - beta_one) * grad
+    new_m = beta_one * m + (1.0 - beta_one) * grad
+    # Step 2: Return the updated first moment estimate.
+    return new_m
 
 # Step 38 - adam_update_v (not yet solved)
 # TODO: implement
