@@ -1280,8 +1280,47 @@ def train_step(params, opt_state, xb, yb,
     # and scalar training loss.
     return new_params, new_opt_state, loss
 
-# Step 57 - train_one_epoch (not yet solved)
-# TODO: implement
+# Step 57 - train_one_epoch
+import numpy as np
+
+def train_one_epoch(params, opt_state, x, y,
+                    batch_size,
+                    lr,
+                    beta_one,
+                    beta_two,
+                    eps,
+                    step_counter,
+                    seed=0):
+    # Step 1: Create a list to store the loss from every
+    # mini-batch in this epoch.
+    losses = []
+    # Step 2: Iterate over one epoch of shuffled mini-batches.
+    for xb, yb in iterate_minibatches(
+        x,
+        y,
+        batch_size=batch_size,
+        seed=seed
+    ):
+        # Step 3: Advance the global Adam step counter.
+        step_counter += 1
+
+        # Step 4: Perform one training step on the current batch.
+        params, opt_state, loss = train_step(
+            params,
+            opt_state,
+            xb,
+            yb,
+            lr,
+            beta_one,
+            beta_two,
+            eps,
+            step_counter
+        )
+        # Step 5: Record the batch loss.
+        losses.append(loss)
+    # Step 6: Return the updated model, optimizer state,
+    # step counter, and batch losses.
+    return params, opt_state, step_counter, losses
 
 # Step 58 - train_loop (not yet solved)
 # TODO: implement
