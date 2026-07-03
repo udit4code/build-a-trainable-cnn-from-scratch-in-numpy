@@ -450,8 +450,35 @@ def conv2d_grad_input(d_out, cache):
     dx = col2im(d_cols,x_shape,kernel_h,kernel_w,stride,padding)
     return dx
 
-# Step 19 - conv2d_grad_weights (not yet solved)
-# TODO: implement
+# Step 19 - conv2d_grad_weights
+import numpy as np
+
+def conv2d_grad_weights(d_out, cache):
+    # Step 1: Retrieve values saved during the forward pass.
+    cols = cache["cols"]
+    weights = cache["weights"]
+    kernel_h = cache["kernel_h"]
+    kernel_w = cache["kernel_w"]
+    C_out, C_in, _, _ = weights.shape
+    # Step 2: Move the output-channel dimension to the front before flattening.
+    # Current:
+    # (N, C_out, out_h, out_w)
+    # Desired:
+    # (C_out, N*out_h*out_w)
+    # This matches the matrix layout used in the mathematical derivation.
+    d_out_matrix = (d_out.transpose(1, 0, 2, 3).reshape(C_out, -1))
+    # Step 3: Compute the gradient of the flattened weight matrix.
+    # d_out_matrix:
+    # (C_out, N*out_h*out_w)
+    # cols:
+    # (N*out_h*out_w, C_in*kh*kw)
+    # Result:
+    # (C_out, C_in*kh*kw)
+    d_weight_matrix = d_out_matrix @ cols
+    # Step 4: Reshape back to the original filter layout.
+    # (C_out, C_in*kh*kw) -> (C_out, C_in, kh, kw)
+    d_weights = d_weight_matrix.reshape(C_out,C_in,kernel_h,kernel_w)
+    return d_weights
 
 # Step 20 - conv2d_grad_bias (not yet solved)
 # TODO: implement
