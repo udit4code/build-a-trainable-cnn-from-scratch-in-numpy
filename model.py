@@ -1083,8 +1083,46 @@ def backward_classifier_block(dlogits, cache):
         }
     }
 
-# Step 50 - lenet_backward (not yet solved)
-# TODO: implement
+# Step 50 - lenet_backward
+import numpy as np
+
+def lenet_backward(dlogits, caches):
+    # Step 1: Backpropagate through the classifier block.
+    classifier_grads = backward_classifier_block(
+        dlogits,
+        caches["classifier"]
+    )
+    # Step 2: Backpropagate through the second convolution block.
+    dx2, dW2, db2 = backward_conv_block(
+        classifier_grads["dx"],
+        caches["block2"]
+    )
+    # Step 3: Backpropagate through the first convolution block.
+    dx1, dW1, db1 = backward_conv_block(
+        dx2,
+        caches["block1"]
+    )
+    # Step 4: Assemble all parameter gradients into one dictionary.
+    grads = {
+        "conv1": {
+            "dW": dW1,
+            "db": db1
+        },
+        "conv2": {
+            "dW": dW2,
+            "db": db2
+        },
+        "fc1": {
+            "dW": classifier_grads["fc1"]["dW"],
+            "db": classifier_grads["fc1"]["db"]
+        },
+        "fc2": {
+            "dW": classifier_grads["fc2"]["dW"],
+            "db": classifier_grads["fc2"]["db"]
+        }
+    }
+    # Step 5: Return all parameter gradients.
+    return grads
 
 # Step 51 - lenet_predict (not yet solved)
 # TODO: implement
