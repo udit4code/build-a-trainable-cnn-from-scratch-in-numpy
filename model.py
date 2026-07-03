@@ -615,8 +615,19 @@ def relu_forward(x):
     # Step 3: Return the output and the cache.
     return out, cache
 
-# Step 26 - relu_backward (not yet solved)
-# TODO: implement
+# Step 26 - relu_backward
+import numpy as np
+
+def relu_backward(d_out, cache):
+    # Step 1: Retrieve the original input from the forward pass.
+    x = cache["x"]
+    # Step 2: Create a mask identifying the elements that were strictly positive during the forward pass.
+    positive_mask = x > 0
+    # Step 3: Propagate the upstream gradient only through the positive elements. 
+    # Gradients for non-positive inputs become 0.
+    dx = d_out * positive_mask
+    # Step 4: Return the input gradient.
+    return dx
 
 # Step 27 - flatten_forward (not yet solved)
 # TODO: implement
