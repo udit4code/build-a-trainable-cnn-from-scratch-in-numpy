@@ -1348,10 +1348,8 @@ def train_loop(
 
     # Step 2: Initialize the global Adam step counter.
     step_counter = 0
-
     # Step 3: Store the loss from every mini-batch across all epochs.
     loss_history = []
-
     # Step 4: Train for the requested number of epochs.
     for epoch in range(num_epochs):
         params, opt_state, step_counter, epoch_losses = train_one_epoch(
@@ -1368,12 +1366,10 @@ def train_loop(
             # Use a different (but reproducible) shuffle each epoch.
             seed=seed + epoch
         )
-
         # Step 5: Append this epoch's losses to the full history.
         loss_history.extend(epoch_losses)
 
-    # Step 6: Return the trained parameters and the complete
-    # per-mini-batch loss history.
+    # Step 6: Return the trained parameters and the complete per-mini-batch loss history.
     return params, loss_history
 
 # Step 59 - evaluate (not yet solved)
