@@ -599,8 +599,21 @@ def maxpool2d_backward(d_out, cache):
     # Step 4: Return the input gradient.
     return dx
 
-# Step 25 - relu_forward (not yet solved)
-# TODO: implement
+# Step 25 - relu_forward
+import numpy as np
+
+def relu_forward(x):
+    # Step 1: Apply ReLU elementwise.
+    # Positive values remain unchanged, while negative values become zero.
+    out = np.maximum(0, x)
+    # Step 2: Cache the original input.
+    # The backward pass needs the input to determine which elements
+    # were active (x > 0) and which were inactive (x <= 0).
+    cache = {
+        "x": x
+    }
+    # Step 3: Return the output and the cache.
+    return out, cache
 
 # Step 26 - relu_backward (not yet solved)
 # TODO: implement
