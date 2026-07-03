@@ -791,8 +791,15 @@ def adam_update_v(v, grad, beta_two):
     # Step 2: Return the updated second moment estimate.
     return new_v
 
-# Step 39 - adam_bias_correct (not yet solved)
-# TODO: implement
+# Step 39 - adam_bias_correct
+import numpy as np
+
+def adam_bias_correct(moment, beta, t):
+    # Step 1: Undo the bias introduced by initializing the exponential moving average to zero.
+    # corrected_moment = moment / (1 - beta ** t)
+    corrected_moment = moment / (1.0 - beta ** t)
+    # Step 2: Return the bias-corrected moment.
+    return corrected_moment
 
 # Step 40 - adam_param_step (not yet solved)
 # TODO: implement
