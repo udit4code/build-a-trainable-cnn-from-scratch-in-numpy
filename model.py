@@ -1136,8 +1136,50 @@ def lenet_predict(x, params):
     # Step 3: Return the predicted class indices.
     return predictions
 
-# Step 52 - build_synthetic_image_dataset (not yet solved)
-# TODO: implement
+# Step 52 - build_synthetic_image_dataset
+import numpy as np
+
+def build_synthetic_image_dataset(
+    num_samples,
+    num_classes,
+    image_size,
+    in_channels=1,
+    seed=0
+):
+    # Step 1: Create a reproducible random number generator.
+    rng = np.random.default_rng(seed)
+
+    # Step 2: Sample an integer class label for each image.
+    # Shape: (num_samples,)
+    y = rng.integers(
+        low=0,
+        high=num_classes,
+        size=num_samples
+    )
+
+    # Step 3: Generate random image pixels from a standard normal
+    # distribution.
+    # Shape: (N, C, H, W)
+    x = rng.standard_normal(
+        (
+            num_samples,
+            in_channels,
+            image_size,
+            image_size
+        )
+    )
+
+    # Step 4: Shift every image according to its class label.
+    # The shift for class k is k - (num_classes - 1) / 2
+    # Reshape to (N, 1, 1, 1) so NumPy broadcasts the scalar shift
+    # across every channel and spatial location.
+    class_shift = (
+        y - (num_classes - 1) / 2
+    ).reshape(num_samples, 1, 1, 1)
+
+    x = x + class_shift
+    # Step 5: Return the synthetic dataset.
+    return x, y
 
 # Step 53 - shuffle_indices (not yet solved)
 # TODO: implement
